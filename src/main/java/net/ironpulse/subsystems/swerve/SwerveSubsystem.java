@@ -114,7 +114,7 @@ public class SwerveSubsystem extends SwerveDrivetrain implements Subsystem {
      * Apply a {@link SwerveRequest} to the SwerveSubsystem
      *
      * @param requestSupplier A lambda expression returns {@link SwerveRequest}
-     * @return A {@link Command}
+     * @return A {@link  Command}
      */
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));

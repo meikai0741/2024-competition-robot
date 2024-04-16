@@ -2,6 +2,7 @@ package net.ironpulse.subsystems.shooter;
 
 import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -52,6 +53,7 @@ public class ShooterIOTalonFX implements ShooterIO {
                 .withSlot0(armGainsUp)
                 .withMotionMagic(motionMagicConfigs)
                 .withMotorOutput(motorOutputConfigs)
+                .withClosedLoopRamps(rampConfigs)
                 .withFeedback(feedbackConfigs);
         var response = armTalon.getConfigurator().apply(armMotorConfig);
         if (response.isError())

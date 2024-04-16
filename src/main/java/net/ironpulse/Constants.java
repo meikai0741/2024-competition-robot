@@ -1,5 +1,6 @@
 package net.ironpulse;
 
+import com.ctre.phoenix6.configs.ClosedLoopRampsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
@@ -16,8 +17,11 @@ import net.ironpulse.subsystems.swerve.SwerveSubsystem;
 
 import static edu.wpi.first.units.Units.*;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardNumber;
+
 public final class Constants {
     public static final Mode currentMode = Mode.REAL;
+    public static final boolean TUNING = true;
 
     public static String CAN_BUS_NAME = "6941CANivore1";
 
@@ -37,7 +41,10 @@ public final class Constants {
          */
         REPLAY
     }
-
+    private static final LoggedDashboardNumber ArmP = new LoggedDashboardNumber("arm p", 300);
+    private static final LoggedDashboardNumber ArmI = new LoggedDashboardNumber("arm i", 0.0);
+    private static final LoggedDashboardNumber ArmD = new LoggedDashboardNumber("arm d", 0.0);
+    //private static final LoggedDashboardNumber MMacc = new LoggedDashboardNumber("acc limit", 10);
     public static class SwerveConstants {
         // The max speed of the swerve (should not larger than speedAt12Volts)
         public static final Measure<Velocity<Distance>> maxSpeed = MetersPerSecond.of(6);
@@ -230,19 +237,23 @@ public final class Constants {
 
         // Shooter gains when deploying shooter to desired angle
         public static final Slot0Configs armGainsUp = new Slot0Configs()
-                .withKP(60)
-                .withKI(0.01)
-                .withKD(0.02)
-                .withKV(0.12) // add 12v for desired velocity
+                .withKP(480)
+                .withKI(0.0)
+                .withKD(0.0)
+                //.withKV(0.12) // add 12v for desired velocity
                 .withKS(0.25); // add 0.24v to overcome friction
 
-        public static final Measure<Current> armZeroCurrent = Amps.of(1.2);
+        public static final Measure<Current> armZeroCurrent = Amps.of(1.0);
         public static final Measure<Voltage> armZeroVoltage = Volts.of(-2);
 
+        public static final ClosedLoopRampsConfigs rampConfigs = new ClosedLoopRampsConfigs()
+        .withVoltageClosedLoopRampPeriod(0.3);
+
         public static final MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs()
-                .withMotionMagicAcceleration(30)
-                .withMotionMagicJerk(70)
-                .withMotionMagicCruiseVelocity(60);
+                .withMotionMagicAcceleration(2.5)
+//                .withMotionMagicJerk(70)
+                .withMotionMagicCruiseVelocity(1);
+
         public static final MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs()
                 .withNeutralMode(NeutralModeValue.Brake);
 
@@ -259,7 +270,7 @@ public final class Constants {
         public static final Measure<Voltage> shortShootVoltage = Volts.of(-8);
         public static final Measure<Distance> shortShootMaxDistance = Meters.of(2.7);
         public static final Measure<Distance> shootMaxDistance = Meters.of(3.7);
-        public static final Measure<Voltage> farShootVoltage = Volts.of(-11);
+        public static final Measure<Voltage> farShootVoltage = Volts.of(-13);
         public static final Measure<Voltage> pullVoltage = Volts.of(-8);
 
         public static Measure<Angle> speakerArmOffsetNear = Degrees.of(17);
@@ -292,4 +303,9 @@ public final class Constants {
             }
         }
     }
+
+    static {
+        
+    }
+    
 }

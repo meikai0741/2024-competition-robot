@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import net.ironpulse.Constants;
 import net.ironpulse.drivers.Limelight;
 import net.ironpulse.subsystems.shooter.ShooterSubsystem;
+import net.ironpulse.utils.ShootingParameters;
+import net.ironpulse.utils.ShootingParametersTable;
 
 import static edu.wpi.first.units.Units.Volts;
 import static net.ironpulse.Constants.ShooterConstants.*;
@@ -37,26 +39,29 @@ public class PreShootCommand extends Command {
                 .targetPoseCameraSpace()
                 .getTranslation()
                 .getDistance(new Translation3d());
-        if (distance >= shortShootMaxDistance.magnitude() + 0.1) {
+        if (distance >= shortShootMaxDistance.magnitude() + 0.5) {
             defaultVoltage = farShootVoltage;
             shooterSubsystem.getIo().setShooterVoltage(farShootVoltage);
             return;
         }
-        if (shortShootMaxDistance.magnitude() - 0.1 < distance && distance < shortShootMaxDistance.magnitude() + 0.1) {
+        if (shortShootMaxDistance.magnitude() - 0.1 < distance && distance < shortShootMaxDistance.magnitude() + 0.5) {
             // looks advanced! do not touch!
-//            shooterSubsystem.getIo().setShooterVoltage(Volts.of(
-//                    ((distance - shortShootMaxDistance.magnitude() + 0.1) / 0.2) * (farShootVoltage.magnitude() - shortShootVoltage.magnitude()))
-//            );
+            double tempd = (distance - shortShootMaxDistance.magnitude() + 0.1) / 0.6;
+            tempd = tempd * (farShootVoltage.magnitude() - shortShootVoltage.magnitude());
+            defaultVoltage = Volts.of(tempd + shortShootVoltage.magnitude());
+            ShootingParameters parameter = ShootingParametersTable.getInstance().getParameters(distance);
+            shooterSubsystem.getIo().setShooterVoltage(Volts.of(parameter.getVoltage()));
+           
             // Basic math, Watson.
             // Method to derive:
             // delta (farShoot-shortShoot) / delta distance => k
             // substitute one point in => b
-            defaultVoltage = Volts.of(
-                    15 * distance - 29.5
-            ).negate();
-            shooterSubsystem.getIo().setShooterVoltage(Volts.of(
-                    15 * distance - 29.5
-            ).negate());
+            // defaultVoltage = Volts.of(
+            //         15 * distance - 29.5
+            // ).negate();
+            // shooterSubsystem.getIo().setShooterVoltage(Volts.of(
+            //         15 * distance - 29.5
+            // ).negate());
             return;
         }
         defaultVoltage = shortShootVoltage;

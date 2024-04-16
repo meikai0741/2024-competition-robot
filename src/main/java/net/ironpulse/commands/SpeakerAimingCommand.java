@@ -2,19 +2,24 @@ package net.ironpulse.commands;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import net.ironpulse.Constants;
 import net.ironpulse.drivers.LimelightHelpers;
 import net.ironpulse.subsystems.indicator.IndicatorIO;
 import net.ironpulse.subsystems.indicator.IndicatorSubsystem;
+import net.ironpulse.subsystems.shooter.ShooterIO;
 import net.ironpulse.subsystems.shooter.ShooterSubsystem;
 import net.ironpulse.subsystems.swerve.FieldCentricTargetHeading;
 import net.ironpulse.subsystems.swerve.SwerveSubsystem;
+import net.ironpulse.utils.ShootingParameters;
+import net.ironpulse.utils.ShootingParametersTable;
 import net.ironpulse.utils.Utils;
 
 import static edu.wpi.first.units.Units.Degrees;
@@ -75,13 +80,30 @@ public class SpeakerAimingCommand extends Command {
 
         // Calculated using highly-sophisticated software.
         // Do not touch unless you (really) know what you're doing!
-//        offset = -297 + 573.9 * distance - 427.3 * Math.pow(distance, 2) + 168.9 * Math.pow(distance, 3) - 33.43 * Math.pow(distance, 4) + 2.593 * Math.pow(distance, 5);
-        double A1 = 18.43145;
-        double A2 = 67.62172;
-        double x0 = 2.07751;
-        double p = 5.16297;
-        offset = A2 + (A1 - A2) / (1 + Math.pow(distance / x0, p));
-        debug("Shooter:", "offset = " + offset);
+        // double A = -317.1;
+        // double B = 631.7;
+        // double C = -489.2;
+        // double D = 200.1;
+        // double E = -40.88;
+        // double F = 3.268;
+        // offset =  A + B * distance + C * Math.pow(distance, 2) + D * Math.pow(distance, 3) + E * Math.pow(distance, 4) + F * Math.pow(distance, 5);
+        // double A1 = 18.43145;
+        // double A2 = 67.62172;
+        // double x0 = 2.07751;
+        // double p = 5.16297;
+        // offset = A2 + (A1 - A2) / (1 + Math.pow(distance / x0, p));
+        // double A1 = 69.6287;
+        // double A2 = 11.4576;
+        // double x0 = 1.99428;
+        // double p = -4.33742;
+        // offset = A2 + (A1 - A2) / (1 + Math.pow(distance / x0, p)) + 1. ;
+
+        ShootingParameters parameter  = ShootingParametersTable.getInstance().getParameters(distance);
+        
+        // debug("Shooter:", "desired angle = " + offset);
+        // //debug("Shooter:", "actual angle = " + shooterSubsystem.getInputs().armPosition.in(Degrees));
+        // SmartDashboard.putNumber("shooter desired angle", Units.degreesToRadians(offset));
+        
         if (0 > offset || offset > 180) {
             debug("Shooter:", "wtf?");
             shooterSubsystem.getIo().setArmPosition(defaultAngle);
@@ -96,7 +118,7 @@ public class SpeakerAimingCommand extends Command {
                     .getIo()
                     .setArmPosition(
                             Radians.of(
-                                    Units.degreesToRadians(offset))
+                                    Units.degreesToRadians(parameter.getAngle()))
                     );
         }
 
