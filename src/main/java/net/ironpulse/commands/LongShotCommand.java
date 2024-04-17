@@ -13,16 +13,15 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import net.ironpulse.Constants;
+import net.ironpulse.Constants.HeadingController;
 import net.ironpulse.drivers.LimelightHelpers;
 import net.ironpulse.subsystems.indicator.IndicatorIO;
 import net.ironpulse.subsystems.indicator.IndicatorSubsystem;
 import net.ironpulse.subsystems.shooter.ShooterSubsystem;
 import net.ironpulse.subsystems.swerve.FieldCentricHeading;
-import net.ironpulse.subsystems.swerve.FieldCentricTargetHeading;
 import net.ironpulse.subsystems.swerve.SwerveSubsystem;
 import net.ironpulse.utils.Utils;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 import static net.ironpulse.Constants.Logger.debug;
 import static net.ironpulse.Constants.SwerveConstants.*;
@@ -49,18 +48,31 @@ public class LongShotCommand extends Command {
         this.swerveSubsystem = swerveSubsystem;
         this.driverController = driverController;
         drive.HeadingController.setPID(headingGains.kP, headingGains.kI, headingGains.kD);
-        drive.HeadingController.enableContinuousInput(0, 360.0);
-
+        drive.HeadingController.enableContinuousInput(-180.0, 180.0);
+        // drive.HeadingController.enableContinuousInput(0.0, 360.0);
+        drive.HeadingController.setP(HeadingController.SNAP_HEADING_KP.get());
+        drive.HeadingController.setD(HeadingController.SNAP_HEADING_KD.get());
     }
 
     @Override
     public void initialize() {
+        
     }
 
     @Override
     public void execute() {
+        if(HeadingController.SNAP_HEADING_KP.hasChanged()) {
+            debug("Changing Snap KP!");
+            drive.HeadingController.setP(HeadingController.SNAP_HEADING_KP.get());
+        }
+
+        if(HeadingController.SNAP_HEADING_KD.hasChanged()) {
+            debug("Changing Snap KD!");
+            drive.HeadingController.setD(HeadingController.SNAP_HEADING_KD.get());
+        }
+
         this.indicatorSubsystem.setPattern(IndicatorIO.Patterns.AIMING);
-        Rotation2d targetAngle = Rotation2d.fromDegrees(135); // test this first
+        Rotation2d targetAngle = Rotation2d.fromDegrees(135+180); // test this first
         // Translation2d currentTranslation =
         // swerveSubsystem.getPose().getTranslation();
         // Translation2d deltaTranslation = targetTranslation.minus(currentTranslation);

@@ -23,17 +23,15 @@ public class ShootingParametersTable {
     }
 
     private ShootingParametersTable() {
-        loadParameter(2.84, -10, 59.5);
-        loadParameter(2.38, -7, 49.5);
-        loadParameter(2.65, -8, 21.0);
-        loadParameter(2.1, -7, 44);
-        loadParameter(1.96, -7, 40);
-        loadParameter(2.57, -7, 55.5);
-        loadParameter(2.75, -9, 59);
-        loadParameter(3.4, -12, 64);
-        loadParameter(3.18, -11, 63);
-        loadParameter(3.59, -12, 65.5);
-        loadParameter(3.82, -12, 66.5);
+        loadParameter(1.28, -7, 12);
+        loadParameter(1.47, -7, 22);
+        loadParameter(1.86, -8, 33);
+        loadParameter(2.17, -9, 44);
+        loadParameter(2.47, -9, 53);
+        loadParameter(2.65, -10, 56.3);
+        loadParameter(3.01, -11, 62);
+        loadParameter(3.3, -12, 68);
+        loadParameter(3.5, -12, 72);
         readyTuning();
     }
 

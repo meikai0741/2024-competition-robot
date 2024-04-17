@@ -1,5 +1,6 @@
 package net.ironpulse.commands;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -11,10 +12,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import net.ironpulse.Constants;
+import net.ironpulse.Constants.ShooterConstants;
 import net.ironpulse.drivers.LimelightHelpers;
 import net.ironpulse.subsystems.indicator.IndicatorIO;
 import net.ironpulse.subsystems.indicator.IndicatorSubsystem;
 import net.ironpulse.subsystems.shooter.ShooterIO;
+import net.ironpulse.subsystems.shooter.ShooterIOTalonFX;
 import net.ironpulse.subsystems.shooter.ShooterSubsystem;
 import net.ironpulse.subsystems.swerve.FieldCentricTargetHeading;
 import net.ironpulse.subsystems.swerve.SwerveSubsystem;
@@ -26,6 +29,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Radians;
 import static net.ironpulse.Constants.Logger.debug;
 import static net.ironpulse.Constants.SwerveConstants.*;
+import static net.ironpulse.Constants.HeadingController;
 
 public class SpeakerAimingCommand extends Command {
     private final ShooterSubsystem shooterSubsystem;
@@ -50,7 +54,11 @@ public class SpeakerAimingCommand extends Command {
         this.swerveSubsystem = swerveSubsystem;
         this.driverController = driverController;
         drive.HeadingController.setPID(headingGains.kP, headingGains.kI, headingGains.kD);
+        drive.HeadingController.setP(HeadingController.HEADING_KP.get());
+        drive.HeadingController.setD(HeadingController.HEADING_KD.get());
+        drive.HeadingController.setI(HeadingController.HEADING_KI.get());
     }
+    
 
     @Override
     public void initialize() {
@@ -59,23 +67,39 @@ public class SpeakerAimingCommand extends Command {
 
     @Override
     public void execute() {
+        if(HeadingController.HEADING_KP.hasChanged()) {
+            debug("Changing KP!");
+            drive.HeadingController.setP(HeadingController.HEADING_KP.get());
+        }
+
+        if(HeadingController.HEADING_KD.hasChanged()) {
+            debug("Changing KD!");
+            drive.HeadingController.setD(HeadingController.HEADING_KD.get());
+        }
+        
+
+        
+
         this.indicatorSubsystem.setPattern(IndicatorIO.Patterns.AIMING);
         var offset = Constants.ShooterConstants.speakerArmOffset.magnitude();
         boolean hasTarget = LimelightHelpers.getTV("limelight");
+        
         if (!hasTarget) {
-            shooterSubsystem.getIo().setArmPosition(defaultAngle);
+            debug(" "+ hasTarget);
             return;
         }
         Pose3d target = LimelightHelpers.getTargetPose3d_CameraSpace("limelight");
         var distance = target.getTranslation().getDistance(new Translation3d());
         var angle = Units.radiansToDegrees(target.getRotation().getAngle());
-        if (distance == 0) {
-            debug("Shooter:", "wtf?");
-            shooterSubsystem.getIo().setArmPosition(defaultAngle);
-            return;
-        }
+        // if (distance == 0) {
+        //     debug("Shooter:", "wtf?");
+        //     shooterSubsystem.getIo().setArmPosition(defaultAngle);
+        //     return;
+        // }
+
+        ShootingParameters parameter  = ShootingParametersTable.getInstance().getParameters(distance);
         debug("Shooter:",
-                " distance => " + distance + " angle => " + angle);
+                " distance => " + distance + " angle => " + parameter.getAngle());
         this.indicatorSubsystem.setPattern(IndicatorIO.Patterns.AIMED);
 
         // Calculated using highly-sophisticated software.
@@ -98,11 +122,11 @@ public class SpeakerAimingCommand extends Command {
         // double p = -4.33742;
         // offset = A2 + (A1 - A2) / (1 + Math.pow(distance / x0, p)) + 1. ;
 
-        ShootingParameters parameter  = ShootingParametersTable.getInstance().getParameters(distance);
+        
         
         // debug("Shooter:", "desired angle = " + offset);
         // //debug("Shooter:", "actual angle = " + shooterSubsystem.getInputs().armPosition.in(Degrees));
-        // SmartDashboard.putNumber("shooter desired angle", Units.degreesToRadians(offset));
+        SmartDashboard.putNumber("shooter desired angle", Units.degreesToRadians(parameter.getAngle()));
         
         if (0 > offset || offset > 180) {
             debug("Shooter:", "wtf?");
@@ -133,6 +157,8 @@ public class SpeakerAimingCommand extends Command {
                         )
                         .withCurrentTx(LimelightHelpers.getTX("limelight") * 1.6)
         ).execute();
+
+        //debug(" " + Constants.HeadingController.HEADING_KP.get());
     }
 
     @Override

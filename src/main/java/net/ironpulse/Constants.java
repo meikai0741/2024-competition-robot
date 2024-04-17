@@ -14,6 +14,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.units.*;
 import net.ironpulse.subsystems.swerve.SwerveSubsystem;
+import net.ironpulse.utils.TunableNumber;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -41,20 +42,21 @@ public final class Constants {
          */
         REPLAY
     }
-    private static final LoggedDashboardNumber ArmP = new LoggedDashboardNumber("arm p", 300);
-    private static final LoggedDashboardNumber ArmI = new LoggedDashboardNumber("arm i", 0.0);
-    private static final LoggedDashboardNumber ArmD = new LoggedDashboardNumber("arm d", 0.0);
-    //private static final LoggedDashboardNumber MMacc = new LoggedDashboardNumber("acc limit", 10);
+
+    public static final LoggedDashboardNumber ArmP = new LoggedDashboardNumber("arm p", 400);
+    public static final LoggedDashboardNumber ArmI = new LoggedDashboardNumber("arm i", 200);
+    public static final LoggedDashboardNumber ArmD = new LoggedDashboardNumber("arm d", 15);
+
+    // private static final LoggedDashboardNumber MMacc = new
+    // LoggedDashboardNumber("acc limit", 10);
     public static class SwerveConstants {
         // The max speed of the swerve (should not larger than speedAt12Volts)
         public static final Measure<Velocity<Distance>> maxSpeed = MetersPerSecond.of(6);
         // The max turning speed of the swerve
         public static final Measure<Velocity<Angle>> maxAngularRate = RotationsPerSecond.of(1.5 * Math.PI);
 
-        public static final SlewRateLimiter xLimiter =
-                new SlewRateLimiter(3, -3.25, 0);
-        public static final SlewRateLimiter yLimiter =
-                new SlewRateLimiter(3, -3.25, 0);
+        public static final SlewRateLimiter xLimiter = new SlewRateLimiter(3, -3.25, 0);
+        public static final SlewRateLimiter yLimiter = new SlewRateLimiter(3, -3.25, 0);
 
         // Swerve steering gains
         private static final Slot0Configs steerGains = new Slot0Configs()
@@ -76,12 +78,10 @@ public final class Constants {
 
         // The closed-loop output type to use for the steer motors;
         // This affects the PID/FF gains for the steer motors
-        private static final SwerveModule.ClosedLoopOutputType steerClosedLoopOutput =
-                SwerveModule.ClosedLoopOutputType.Voltage;
+        private static final SwerveModule.ClosedLoopOutputType steerClosedLoopOutput = SwerveModule.ClosedLoopOutputType.Voltage;
         // The closed-loop output type to use for the drive motors;
         // This affects the PID/FF gains for the drive motors
-        private static final SwerveModule.ClosedLoopOutputType driveClosedLoopOutput =
-                SwerveModule.ClosedLoopOutputType.Voltage;
+        private static final SwerveModule.ClosedLoopOutputType driveClosedLoopOutput = SwerveModule.ClosedLoopOutputType.Voltage;
 
         // The stator current at which the wheels start to slip
         private static final Measure<Current> slipCurrent = Amps.of(300.0);
@@ -209,8 +209,8 @@ public final class Constants {
                 .withKI(0)
                 .withKD(0);
 
-        public static final SwerveSubsystem DriveTrain =
-                new SwerveSubsystem(DrivetrainConstants, FrontLeft, FrontRight, BackLeft, BackRight);
+        public static final SwerveSubsystem DriveTrain = new SwerveSubsystem(DrivetrainConstants, FrontLeft,
+                FrontRight, BackLeft, BackRight);
     }
 
     public static class IndexerConstants {
@@ -235,23 +235,25 @@ public final class Constants {
         public static final int ARM_MOTOR_ID = 43;
         public static final int PULLER_MOTOR_ID = 44;
 
+        public static final TunableNumber custumAngle = new TunableNumber("custum angle", 30);
+        public static final TunableNumber custumVoltage = new TunableNumber("custm V", -7);
+
         // Shooter gains when deploying shooter to desired angle
         public static final Slot0Configs armGainsUp = new Slot0Configs()
-                .withKP(480)
-                .withKI(0.0)
-                .withKD(0.0)
-                //.withKV(0.12) // add 12v for desired velocity
+                .withKP(400)
+                .withKI(200)
+                .withKD(15)
+                // .withKV(0.12) // add 12v for desired velocity
                 .withKS(0.25); // add 0.24v to overcome friction
 
         public static final Measure<Current> armZeroCurrent = Amps.of(1.0);
         public static final Measure<Voltage> armZeroVoltage = Volts.of(-2);
 
         public static final ClosedLoopRampsConfigs rampConfigs = new ClosedLoopRampsConfigs()
-        .withVoltageClosedLoopRampPeriod(0.3);
+                .withVoltageClosedLoopRampPeriod(0.3);
 
         public static final MotionMagicConfigs motionMagicConfigs = new MotionMagicConfigs()
                 .withMotionMagicAcceleration(2.5)
-//                .withMotionMagicJerk(70)
                 .withMotionMagicCruiseVelocity(1);
 
         public static final MotorOutputConfigs motorOutputConfigs = new MotorOutputConfigs()
@@ -304,8 +306,12 @@ public final class Constants {
         }
     }
 
-    static {
-        
+    public static class HeadingController {
+        public static final TunableNumber HEADING_KP = new TunableNumber("Heading Controller/kp", 0.04);
+        public static final TunableNumber HEADING_KD = new TunableNumber("Heading Controller/kd", 0.0);
+        public static final TunableNumber HEADING_KI = new TunableNumber("Heading Controller/ki", 0.0);
+        public static final TunableNumber SNAP_HEADING_KP = new TunableNumber("Snap Heading Controller/kp", 0.055);
+        public static final TunableNumber SNAP_HEADING_KD = new TunableNumber("Snap Heading Controller/kd", 0.001);
     }
-    
+
 }

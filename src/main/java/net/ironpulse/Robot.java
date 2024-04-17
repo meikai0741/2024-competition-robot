@@ -74,7 +74,6 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         ShootingParametersTable.getInstance().update();
-        System.out.println(ShootingParametersTable.getInstance().getParameters(3.7));
     }
 
     @Override

@@ -56,7 +56,8 @@ public class FieldCentricHeading implements SwerveRequest {
         var toApplyY = VelocityY;
         var toApplyOmega = HeadingController.calculate(
                 angleCurrent.getDegrees(), angleTarget.getDegrees(),
-                parameters.timestamp);
+                parameters.timestamp
+        );
 
         if (Math.hypot(toApplyX, toApplyY) < Deadband) {
             toApplyX = 0;
