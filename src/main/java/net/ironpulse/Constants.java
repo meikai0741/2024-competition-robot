@@ -47,8 +47,7 @@ public final class Constants {
     public static final LoggedDashboardNumber ArmI = new LoggedDashboardNumber("arm i", 200);
     public static final LoggedDashboardNumber ArmD = new LoggedDashboardNumber("arm d", 15);
 
-    // private static final LoggedDashboardNumber MMacc = new
-    // LoggedDashboardNumber("acc limit", 10);
+
     public static class SwerveConstants {
         // The max speed of the swerve (should not larger than speedAt12Volts)
         public static final Measure<Velocity<Distance>> maxSpeed = MetersPerSecond.of(6);
@@ -207,7 +206,8 @@ public final class Constants {
         public static final Slot0Configs headingGains = new Slot0Configs()
                 .withKP(0.04)
                 .withKI(0)
-                .withKD(0);
+                .withKD(0)
+                .withKS(0);
 
         public static final SwerveSubsystem DriveTrain = new SwerveSubsystem(DrivetrainConstants, FrontLeft,
                 FrontRight, BackLeft, BackRight);
@@ -235,8 +235,8 @@ public final class Constants {
         public static final int ARM_MOTOR_ID = 43;
         public static final int PULLER_MOTOR_ID = 44;
 
-        public static final TunableNumber custumAngle = new TunableNumber("custum angle", 30);
-        public static final TunableNumber custumVoltage = new TunableNumber("custm V", -7);
+        // public static final TunableNumber custumAngle = new TunableNumber("custum angle", 30);
+        // public static final TunableNumber custumVoltage = new TunableNumber("custm V", -7);
 
         // Shooter gains when deploying shooter to desired angle
         public static final Slot0Configs armGainsUp = new Slot0Configs()

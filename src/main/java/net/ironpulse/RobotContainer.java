@@ -134,9 +134,7 @@ public class RobotContainer {
                 operatorController.b().whileTrue(new ShootWithoutAimingCommand(indicatorSubsystem, beamBreakSubsystem,
                                 shooterSubsystem, indexerSubsystem,
                                 () -> operatorController.getHID().getRightBumper()));
-                operatorController.x().whileTrue(new ParallelShootCommand(shooterSubsystem,
-                                indexerSubsystem, beamBreakSubsystem, indicatorSubsystem,
-                                () -> operatorController.getHID().getRightBumper(), Degrees.of(95)));
+                operatorController.x().whileTrue(new PrepareShootCommand(shooterSubsystem));
                 operatorController.a().toggleOnTrue(
                                 new StartClimbCommand(shooterSubsystem, indicatorSubsystem,
                                                 driverController, operatorController,
