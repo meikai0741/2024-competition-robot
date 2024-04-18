@@ -1,8 +1,10 @@
 package net.ironpulse.commands;
 
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import net.ironpulse.Constants;
 import net.ironpulse.Constants.ShooterConstants;
@@ -43,6 +45,9 @@ public class PreShootCommand extends Command {
                 .getDistance(new Translation3d());
 
         ShootingParameters parameter  = ShootingParametersTable.getInstance().getParameters(distance);
+        SmartDashboard.putNumber("shooter desired angle", Units.degreesToRadians(
+            shooterSubsystem.getInputs().leftShooterVelocity.magnitude()
+        ));
 
         shooterSubsystem.getIo().setShooterVoltage(Volts.of(parameter.getVoltage()));
         // if (distance >= shortShootMaxDistance.magnitude() + 0.5) {

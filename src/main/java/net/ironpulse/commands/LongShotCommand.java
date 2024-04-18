@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import net.ironpulse.Constants;
@@ -25,6 +26,8 @@ import net.ironpulse.utils.Utils;
 import static edu.wpi.first.units.Units.Radians;
 import static net.ironpulse.Constants.Logger.debug;
 import static net.ironpulse.Constants.SwerveConstants.*;
+
+import org.littletonrobotics.conduit.ConduitApi;
 
 public class LongShotCommand extends Command {
     private final ShooterSubsystem shooterSubsystem;
@@ -52,8 +55,9 @@ public class LongShotCommand extends Command {
         // drive.HeadingController.enableContinuousInput(0.0, 360.0);
         drive.HeadingController.setP(HeadingController.SNAP_HEADING_KP.get());
         drive.HeadingController.setD(HeadingController.SNAP_HEADING_KD.get());
+        
     }
-
+ 
     @Override
     public void initialize() {
         
@@ -72,10 +76,22 @@ public class LongShotCommand extends Command {
         }
 
         this.indicatorSubsystem.setPattern(IndicatorIO.Patterns.AIMING);
-        Rotation2d targetAngle = Rotation2d.fromDegrees(135+180); // test this first
+        double angle = 0;
+        switch(DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue)){
+            case Blue:
+                angle = -1 * Constants.SwerveConstants.LongShotAngle.get();
+                break;
+            case Red:
+                angle = Constants.SwerveConstants.LongShotAngle.get();
+                break;
+            default:
+                break;
+        }
+
+        Rotation2d targetAngle = Rotation2d.fromDegrees(angle); // test this first
         // Translation2d currentTranslation =
         // swerveSubsystem.getPose().getTranslation();
-        // Translation2d deltaTranslation = targetTranslation.minus(currentTranslation);
+        // Translation2d deltaTranslation = targetTranslation.minus(currentTranslation);.lk
         // Rotation2d targetAngle = deltaTranslation.getAngle();
 
         swerveSubsystem.applyRequest(() -> drive
@@ -85,7 +101,8 @@ public class LongShotCommand extends Command {
                 .withVelocityY(
                         Utils.sign(-driverController.getLeftX()) * maxSpeed.magnitude()
                                 * yLimiter.calculate(Math.abs(driverController.getLeftX())))
-                .withCurrentAngle(swerveSubsystem.getPose().getRotation())
+                .withCurrentAngle(swerveSubsystem.getState().Pose.getRotation().minus(
+                    swerveSubsystem.getOffset()))
                 .withTargetAngle(targetAngle))
                 .execute();
     }

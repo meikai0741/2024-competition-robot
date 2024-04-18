@@ -207,10 +207,12 @@ public final class Constants {
                 .withKP(0.04)
                 .withKI(0)
                 .withKD(0)
-                .withKS(0);
-
+                .withKS(1);
+        //public static final TunableNumber headingks
         public static final SwerveSubsystem DriveTrain = new SwerveSubsystem(DrivetrainConstants, FrontLeft,
                 FrontRight, BackLeft, BackRight);
+
+        public static final TunableNumber LongShotAngle = new TunableNumber("Long shot angle",25);
     }
 
     public static class IndexerConstants {
@@ -272,7 +274,7 @@ public final class Constants {
         public static final Measure<Voltage> shortShootVoltage = Volts.of(-8);
         public static final Measure<Distance> shortShootMaxDistance = Meters.of(2.7);
         public static final Measure<Distance> shootMaxDistance = Meters.of(3.7);
-        public static final Measure<Voltage> farShootVoltage = Volts.of(-13);
+        public static final Measure<Voltage> farShootVoltage = Volts.of(-11);
         public static final Measure<Voltage> pullVoltage = Volts.of(-8);
 
         public static Measure<Angle> speakerArmOffsetNear = Degrees.of(17);
@@ -307,9 +309,10 @@ public final class Constants {
     }
 
     public static class HeadingController {
-        public static final TunableNumber HEADING_KP = new TunableNumber("Heading Controller/kp", 0.04);
+        public static final TunableNumber HEADING_KP = new TunableNumber("Heading Controller/kp", 0.035);
         public static final TunableNumber HEADING_KD = new TunableNumber("Heading Controller/kd", 0.0);
-        public static final TunableNumber HEADING_KI = new TunableNumber("Heading Controller/ki", 0.0);
+        public static final TunableNumber HEADING_KI = new TunableNumber("Heading Controller/ki", 0.005);
+        public static final TunableNumber HEADING_KS = new TunableNumber("Heading Controller/ks",0.12);
         public static final TunableNumber SNAP_HEADING_KP = new TunableNumber("Snap Heading Controller/kp", 0.055);
         public static final TunableNumber SNAP_HEADING_KD = new TunableNumber("Snap Heading Controller/kd", 0.001);
     }

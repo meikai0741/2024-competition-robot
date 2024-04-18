@@ -56,7 +56,8 @@ public class SpeakerAimingCommand extends Command {
         drive.HeadingController.setPID(headingGains.kP, headingGains.kI, headingGains.kD);
         drive.HeadingController.setP(HeadingController.HEADING_KP.get());
         drive.HeadingController.setD(HeadingController.HEADING_KD.get());
-        drive.HeadingController.setI(HeadingController.HEADING_KI.get());
+        //drive.HeadingController.s;
+        //drive.HeadingController.set
     }
     
 
@@ -127,7 +128,11 @@ public class SpeakerAimingCommand extends Command {
         // debug("Shooter:", "desired angle = " + offset);
         // //debug("Shooter:", "actual angle = " + shooterSubsystem.getInputs().armPosition.in(Degrees));
         SmartDashboard.putNumber("shooter desired angle", Units.degreesToRadians(parameter.getAngle()));
-        
+        SmartDashboard.putNumber("heading angle", swerveSubsystem.getPigeon2().getRotation2d().getDegrees());
+        SmartDashboard.putNumber("tag angle", swerveSubsystem.getPigeon2().getRotation2d().getDegrees()
+         + LimelightHelpers.getTX("limelight"));
+
+
         if (0 > offset || offset > 180) {
             debug("Shooter:", "wtf?");
             shooterSubsystem.getIo().setArmPosition(defaultAngle);

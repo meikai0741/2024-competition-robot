@@ -28,10 +28,12 @@ public class ShootingParametersTable {
         loadParameter(1.86, -8, 33);
         loadParameter(2.17, -9, 44);
         loadParameter(2.47, -9, 53);
-        loadParameter(2.65, -10, 56.3);
-        loadParameter(3.01, -11, 62);
-        loadParameter(3.3, -12, 68);
-        loadParameter(3.5, -12, 72);
+        loadParameter(2.65, -10, 55);
+        loadParameter(3.01, -11, 61);
+        loadParameter(3.3, -12, 67);
+        loadParameter(3.5, -12, 68);
+        loadParameter(3.76, -13, 69.5);
+        loadParameter(4, -13, 71);
         readyTuning();
     }
 

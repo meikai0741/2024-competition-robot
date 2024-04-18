@@ -105,7 +105,7 @@ public class RobotContainer {
                                 new IndexOutCommand(indexerSubsystem)));
 
                 driverController.leftBumper().whileTrue(new HighShootCommand(shooterSubsystem,
-                                indexerSubsystem, beamBreakSubsystem, indicatorSubsystem));
+                                indexerSubsystem, beamBreakSubsystem, indicatorSubsystem,swerveSubsystem,driverController));
 
                 operatorController.rightTrigger().whileTrue(
                                 Commands.sequence(
@@ -131,14 +131,12 @@ public class RobotContainer {
                                                 new RumbleCommand(Seconds.of(1), driverController.getHID(),
                                                                 operatorController.getHID())));
 
-                operatorController.b().whileTrue(new ShootWithoutAimingCommand(indicatorSubsystem, beamBreakSubsystem,
-                                shooterSubsystem, indexerSubsystem,
-                                () -> operatorController.getHID().getRightBumper()));
+                
                 operatorController.x().whileTrue(new PrepareShootCommand(shooterSubsystem));
                 operatorController.a().toggleOnTrue(
                                 new StartClimbCommand(shooterSubsystem, indicatorSubsystem,
                                                 driverController, operatorController,
-                                                () -> operatorController.getHID().getYButton()));
+                                                () -> operatorController.getHID().getBButton()));
 
                 operatorController.pov(180).whileTrue(new ShooterDownCommand(shooterSubsystem));
                 operatorController.pov(0).whileTrue(new ClimbManualShooterUpCommand(shooterSubsystem));
