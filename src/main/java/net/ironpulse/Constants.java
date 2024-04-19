@@ -155,7 +155,7 @@ public final class Constants {
         private static final int BACK_LEFT_DRIVE_MOTOR_ID = 5;
         private static final int BACK_LEFT_STEER_MOTOR_ID = 3;
         private static final int BACK_LEFT_ENCODER_ID = 9;
-        private static final double BACK_LEFT_ENCODER_OFFSET = 0.401611;
+        private static final double BACK_LEFT_ENCODER_OFFSET = -0.223145;
         // private static final double BACK_LEFT_ENCODER_OFFSET = 0;
 
         private static final Measure<Distance> backLeftXPos = Meters.of(-0.5);

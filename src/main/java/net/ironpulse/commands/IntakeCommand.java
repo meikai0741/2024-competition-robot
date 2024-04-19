@@ -8,6 +8,7 @@ import net.ironpulse.subsystems.indicator.IndicatorSubsystem;
 import net.ironpulse.subsystems.intaker.IntakerSubsystem;
 import net.ironpulse.subsystems.shooter.ShooterSubsystem;
 import static edu.wpi.first.units.Units.Volts;
+import static net.ironpulse.Constants.Logger.debug;
 
 public class IntakeCommand extends Command {
     private final IntakerSubsystem intakerSubsystem;
@@ -30,9 +31,17 @@ public class IntakeCommand extends Command {
     @Override
     public void execute() {
         if (isFinished()) return;
-        intakerSubsystem.getIo()
-                .setIntakeVoltage(Constants.IntakerConstants.intakeVoltage);
+        if ((shooterSubsystem.getInputs().armPosition.magnitude() > 0.1 && beamBreakSubsystem.getInputs().isIntakerBeamBreakOn)){
+                intakerSubsystem.getIo().setIntakeVoltage(Volts.of(0));
+        }
+        else{
+                intakerSubsystem.getIo().setIntakeVoltage(Constants.IntakerConstants.intakeVoltage);
+        }
+
+        
         shooterSubsystem.getIo().setShooterVoltage(Volts.of(1));
+
+        //debug(" " + shooterSubsystem.getInputs().armPosition.magnitude());
     }
 
     @Override
@@ -49,7 +58,8 @@ public class IntakeCommand extends Command {
 
     @Override
     public boolean isFinished() {
-        return beamBreakSubsystem.getInputs().isIndexerBeamBreakOn &&
-                !beamBreakSubsystem.getInputs().isIntakerBeamBreakOn;
+        return (beamBreakSubsystem.getInputs().isIndexerBeamBreakOn &&
+                !beamBreakSubsystem.getInputs().isIntakerBeamBreakOn);
     }
 }
+

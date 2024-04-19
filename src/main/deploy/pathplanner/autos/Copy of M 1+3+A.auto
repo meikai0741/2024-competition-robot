@@ -119,13 +119,13 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "N1-NA"
+                              "pathName": "N1 - NC"
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "Intake"
+                              "name": "IntakeFar"
                             }
                           }
                         ]
@@ -138,13 +138,13 @@
                           {
                             "type": "path",
                             "data": {
-                              "pathName": "NA-SA"
+                              "pathName": "NC - SC"
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "Intake"
+                              "name": "IntakeFar"
                             }
                           }
                         ]

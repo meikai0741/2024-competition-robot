@@ -1,21 +1,13 @@
 package net.ironpulse.commands;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import net.ironpulse.Constants;
 import net.ironpulse.Constants.HeadingController;
-import net.ironpulse.drivers.LimelightHelpers;
+//import net.ironpulse.drivers.LimelightHelpers;
 import net.ironpulse.subsystems.indicator.IndicatorIO;
 import net.ironpulse.subsystems.indicator.IndicatorSubsystem;
 import net.ironpulse.subsystems.shooter.ShooterSubsystem;
@@ -39,7 +31,7 @@ public class LongShotCommand extends Command {
             .withRotationalDeadband(0)
             .withDriveRequestType(SwerveModule.DriveRequestType.OpenLoopVoltage)
             .withSteerRequestType(SwerveModule.SteerRequestType.MotionMagicExpo);
-    private final Translation2d targetTranslation = new Translation2d(2, 2); // modify this
+    //private final Translation2d targetTranslation = new Translation2d(2, 2); // modify this
 
     public LongShotCommand(
             ShooterSubsystem shooterSubsystem,

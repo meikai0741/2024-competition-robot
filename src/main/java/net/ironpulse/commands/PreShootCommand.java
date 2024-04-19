@@ -7,7 +7,6 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import net.ironpulse.Constants;
-import net.ironpulse.Constants.ShooterConstants;
 import net.ironpulse.drivers.Limelight;
 import net.ironpulse.subsystems.shooter.ShooterSubsystem;
 import net.ironpulse.utils.ShootingParameters;
